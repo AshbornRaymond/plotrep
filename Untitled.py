@@ -111,5 +111,62 @@ print(df)
 # In[ ]:
 
 
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+
+# Load the dataset
+dataset = pd.read_csv('iris.csv')
+
+# Display dataset information
+print(dataset.describe())
+print(dataset.info())
+
+# Define features and target variable
+X = dataset.iloc[:, [0, 1, 2, 3]].values
+Y = dataset.iloc[:, 4].values
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+
+# Standardize the features
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# Create and train the logistic regression model
+classifier = LogisticRegression(random_state=0, solver='lbfgs', multi_class='auto')
+classifier.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = classifier.predict(X_test)
+
+# Predict probabilities
+probs_y = classifier.predict_proba(X_test)
+probs_y = np.round(probs_y, 2)
+
+# Format and print the results
+res = "{:<10}|{:<10}|{:<10}|{:<13}|{:5}".format("y_test", "y_pred", "Setosa(%)", "Versicolor(%)", "Virginica(%)\n")
+res += "-" * 65 + "\n"
+res += "\n".join("{:<10}|{:<10}|{:<10}|{:<13}|{:10}".format(x, y, a, b, c) for x, y, a, b, c in zip(y_test, y_pred, probs_y[:, 0], probs_y[:, 1], probs_y[:, 2]))
+res += "\n" + "-" * 65 + "\n"
+print(res)
+
+# Compute and print the confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+
+# Plot the confusion matrix
+ax = plt.axes()
+sns.heatmap(cm, annot=True, annot_kws={"size": 30}, fmt='d', cmap="Blues", ax=ax)
+ax.set_title('Confusion Matrix')
+plt.show()
+
+
 
 
