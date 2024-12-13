@@ -1,0 +1,166 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Generate some data for plotting
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+
+# Line chart
+plt.figure()
+plt.plot(x, y)
+plt.title("Line Chart")
+
+# Bar chart
+categories = ['A', 'B', 'C', 'D']
+values = [20, 35, 30, 25]
+plt.figure()
+plt.bar(categories, values)
+plt.title("Bar Chart")
+
+# Scatter plot
+x = np.random.randn(100)
+y = np.random.randn(100)
+sizes = 100 * np.random.rand(100)
+plt.figure()
+plt.scatter(x, y, s=sizes, alpha=0.5)
+plt.title("Scatter Plot")
+
+# Pie chart
+sizes = [30, 20, 25, 15, 10]
+labels = ['A', 'B', 'C', 'D', 'E']
+plt.figure()
+plt.pie(sizes, labels=labels)
+plt.title("Pie Chart")
+plt.show()
+
+
+
+
+
+
+
+
+
+import pandas as pd
+
+# Load the Excel file
+file_path = 'data.xlsx'  # Replace with your file path
+df = pd.read_excel(file_path)
+print("Contents of the Excel file:")
+print(df)
+
+# Write data to an Excel file
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [24, 30, 22],
+    'City': ['New York', 'Los Angeles', 'Chicago']
+}
+new_df = pd.DataFrame(data)
+output_file = 'output.xlsx'
+new_df.to_excel(output_file, index=False)
+print(f'Data has been written to {output_file}')
+
+# Append data to an existing Excel file
+existing_df = pd.read_excel(output_file)
+new_data = {
+    'Name': ['David', 'Eva'],
+    'Age': [28, 26],
+    'City': ['Houston', 'Phoenix']
+}
+new_data_df = pd.DataFrame(new_data)
+combined_df = pd.concat([existing_df, new_data_df])
+combined_df.to_excel(output_file, index=False)
+print(f'New data has been appended to {output_file}')
+
+# Filter data from an Excel file
+df = pd.read_excel(file_path)
+filtered_df = df[df['Age'] > 25]
+print("Data (Age > 25):")
+print(filtered_df)
+
+
+
+
+
+
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+dataset = pd.read_csv('advertising.csv')
+
+# Basic information
+print(dataset.head(10))
+print(dataset.shape)
+print(dataset.isna().sum())
+print(dataset.duplicated().any())
+
+# Data visualization
+fig, axs = plt.subplots(3, figsize=(5, 10))
+sns.boxplot(dataset['Newspaper'], ax=axs[0])
+sns.boxplot(dataset['Radio'], ax=axs[1])
+sns.boxplot(dataset['TV'], ax=axs[2])
+plt.tight_layout()
+plt.show()
+
+sns.pairplot(dataset[['Radio', 'Newspaper']], height=4, aspect=1, kind='scatter')
+plt.show()
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+
+y = dataset['Sales']
+x = dataset[['TV', 'Radio', 'Newspaper']]
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=100)
+
+slr = LinearRegression()
+slr.fit(x_train, y_train)
+print('Intercept:', slr.intercept_)
+print('Coefficients:', slr.coef_)
+print(f'Regression Equation: Sales = {slr.intercept_:.3f} + {slr.coef_[0]:.3f}*TV + {slr.coef_[1]:.3f}*Radio + {slr.coef_[2]:.3f}*Newspaper')
+
+plt.scatter(x_train['TV'], y_train, color='blue', label='Training data')
+plt.plot(x_train['TV'], slr.predict(x_train), color='red', label='Regression line')
+plt.xlabel('TV')
+plt.ylabel('Sales')
+plt.legend()
+plt.show()
+
+y_pred_slr = slr.predict(x_test)
+print("Predictions for the test set:\n", y_pred_slr)
+comparison_df = pd.DataFrame({'Actual value': y_test, 'Predicted value': y_pred_slr})
+print(comparison_df)
+r_squared = metrics.r2_score(y_test, y_pred_slr)
+print(f'R-squared value of the model: {r_squared:.2f}')
+
+
+
+
+
+
+
+# Array operations
+a = np.array([2, 3, 4, 5])
+b = np.array([1, 5, 2, 4])
+print("Sum of arrays a and b:", np.add(a, b))
+print("Difference of arrays a and b:", np.subtract(a, b))
+print("Product of arrays a and b:", np.multiply(a, b))
+print("Division of arrays a and b:", np.divide(a, b))
+print("Square root of array a:", np.sqrt(a))
+print("Exponential of array a:", np.exp(a))
+print("Mean of array a:", np.mean(a))
+print("Standard deviation of array b:", np.std(b))
+print("Sum of elements in array a:", np.sum(a))
+c = np.arange(6)
+print("Original array c:", c)
+print("Reshaped array c:")
+print(np.reshape(c, (2, 3)))
+d = np.array([[1, 2], [3, 4], [5, 6]])
+print("Original array d:", d)
+print("Transposed array d:")
+print(np.transpose(d))
